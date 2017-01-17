@@ -1,10 +1,15 @@
-var bootstrapNamespace = function (webserver, io) {
+var bootstrapNamespace = function (webserver, ioNamespace) {
+    var bodyParser = require('body-parser');
+
+    webserver.use(bodyParser.json());
 
     webserver.post('/', function (req, res) {
         var requestData = req.body;
 
+        console.log(JSON.stringify(io.rooms));
+
         if (requestData && requestData.home_id) {
-            io.sockets.in(requestData.home_id).emit('alert', requestData);
+            ioNamespace.in(requestData.home_id).emit('alert', requestData);
         }
 
         res.writeHead(200);
@@ -16,7 +21,7 @@ var bootstrapNamespace = function (webserver, io) {
         res.end("Netatmo");
     });
 
-    io.on('connection', function (socket) {
+    ioNamespace.on('connection', function (socket) {
         socket.on('registerHome', function (homeId) {
             socket.join(homeId);
         });

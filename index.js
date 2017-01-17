@@ -16,3 +16,9 @@ app.all('/', function (req, res) {
 });
 
 server.listen(port);
+
+io.on('connection', function (socket) {
+    socket.on('registerHome', function (homeId) {
+        socket.join(homeId);
+    });
+});
