@@ -6,8 +6,6 @@ var bootstrapNamespace = function (webserver, ioNamespace) {
     webserver.post('/', function (req, res) {
         var requestData = req.body;
 
-        console.log(JSON.stringify(io.rooms));
-
         if (requestData && requestData.home_id) {
             ioNamespace.in(requestData.home_id).emit('alert', requestData);
         }
